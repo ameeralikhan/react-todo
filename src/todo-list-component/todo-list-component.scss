@@ -1,0 +1,18 @@
+.todo-list-container{
+.todo-table{
+    border: 1px solid black;
+    text-align: center;
+    display: inline-block;
+    width: 50%;
+    thead, tbody{
+        width: 100%;
+    display: block;
+    th{
+        width: calc(100%/4);
+    }
+    tr{
+        width: calc(100%/4);
+    }
+    }
+}
+}
