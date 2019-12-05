@@ -9,6 +9,7 @@ import {
 } from "../type/action";
 import { Dispatch } from "redux";
 import { AppState } from "../store/configureStore";
+import { createTodo } from "../add-todo-component/add-todo-service";
 
 export const addTodo = (todo: Todo): AppActions => ({
     type: ADD_TODO,
@@ -39,6 +40,8 @@ export const startAddTodo = (todoData: Todo) => {
             estimatedDate = ''
         } = todoData;
         const todo = { id, description, title, estimatedDate } as Todo;
+
+        createTodo(todo);
 
         return dispatch(
             addTodo(todo)

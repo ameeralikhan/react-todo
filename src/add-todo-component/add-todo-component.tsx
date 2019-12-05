@@ -13,7 +13,6 @@ import { AppActions } from '../type/action';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { startEditTodo, startAddTodo } from '../action/todo';
-import { createTodo } from './add-todo-service';
 const TextInput = (fieldProps: any) => (
     <div>
         <input type={`${fieldProps.meta.type || 'text'}`} placeholder={`Enter ${fieldProps.meta.label}`} {...fieldProps.handler()} />
@@ -48,8 +47,8 @@ class AddTodoComponent extends Component<Props, AddTodoState> {
     };
 
     onAdd = (todo: Todo) => {
-        createTodo(todo);
         this.props.startAddTodo(todo);
+        this.loginForm.reset();
     };
 
     handleSubmit = (e: any) => {
