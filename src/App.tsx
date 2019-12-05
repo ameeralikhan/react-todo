@@ -6,34 +6,34 @@ import {
   Link
 } from 'react-router-dom';
 import './App.css';
-import { AddTodoComponent } from './add-todo-component/add-todo-component';
-import { TodoListComponent } from './todo-list-component/todo-list-component';
+import AddTodoContainer from './add-todo-component/add-todo-component';
+import TodoListContainer from './todo-list-component/todo-list-component';
+import { Provider } from 'react-redux';
+import { store } from "./store/configureStore";
 
 const App: React.FC = () => {
   return (
     <div className="App">
-      <Router>
-        <div>
-          <nav>
-            <ul>
-              <li>
-                <Link to="/">TODO List</Link>
-              </li>
-              <li>
-                <Link to="/add-todo">Add New TODO</Link>
-              </li>
-            </ul>
-          </nav>
-          <Switch>
-            <Route path="/add-todo">
-              <AddTodoComponent></AddTodoComponent>
-            </Route>
-            <Route path="/">
-              <TodoListComponent></TodoListComponent>
-            </Route>
-          </Switch>
-        </div>
-      </Router>
+      <Provider store={store}>
+        <Router>
+          <div>
+            <nav>
+              <ul>
+                <li>
+                  <Link to="/">TODO List</Link>
+                </li>
+                <li>
+                  <Link to="/add-todo">Add New TODO</Link>
+                </li>
+              </ul>
+            </nav>
+            <Switch>
+              <Route path="/add-todo" component={AddTodoContainer} />
+              <Route path="/" component={TodoListContainer} />
+            </Switch>
+          </div>
+        </Router>
+      </Provider>
     </div>
   );
 }

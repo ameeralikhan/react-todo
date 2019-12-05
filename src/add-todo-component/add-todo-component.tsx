@@ -6,8 +6,14 @@ import {
     FieldControl,
     Validators,
 } from "react-reactive-form";
-import { TodoService } from "./add-todo-service";
-
+import { Todo } from '../type/Todo';
+import { AppState } from '../store/configureStore';
+import { ThunkDispatch } from 'redux-thunk';
+import { AppActions } from '../type/action';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { startEditTodo, startAddTodo } from '../action/todo';
+import { createTodo } from './add-todo-service';
 const TextInput = (fieldProps: any) => (
     <div>
         <input type={`${fieldProps.meta.type || 'text'}`} placeholder={`Enter ${fieldProps.meta.label}`} {...fieldProps.handler()} />
@@ -19,13 +25,13 @@ const TextInput = (fieldProps: any) => (
     </div>
 )
 
-type TodoListProps = {
-    refreshTodos?: any
-}
+interface AddTodoProps { }
 
-export class AddTodoComponent extends Component<TodoListProps> {
+interface AddTodoState { }
 
-    todoService = new TodoService();
+type Props = AddTodoProps & LinkStateProps & LinkDispatchProps;
+
+class AddTodoComponent extends Component<Props, AddTodoState> {
 
     loginForm = FormBuilder.group({
         title: ["", Validators.required],
@@ -37,10 +43,18 @@ export class AddTodoComponent extends Component<TodoListProps> {
         this.loginForm.reset();
     }
 
+    onEdit = (todo: Todo) => {
+        this.props.startEditTodo(todo);
+    };
+
+    onAdd = (todo: Todo) => {
+        createTodo(todo);
+        this.props.startAddTodo(todo);
+    };
+
     handleSubmit = (e: any) => {
         e.preventDefault();
-        this.todoService.createTodo(this.loginForm.value);
-        this.props.refreshTodos();
+        this.onAdd(this.loginForm.value as Todo);
     }
 
     componentWillMount() { }
@@ -88,3 +102,34 @@ export class AddTodoComponent extends Component<TodoListProps> {
         </div>
     }
 }
+
+interface LinkStateProps {
+    todos: Todo[];
+}
+interface LinkDispatchProps {
+    startAddTodo: (todo: Todo) => void;
+    startEditTodo: (todo: Todo) => void;
+}
+
+const mapStateToProps = (
+    state: AppState,
+    ownProps: AddTodoProps
+): LinkStateProps => ({
+    todos: state.todoReducer.todos
+});
+
+const mapDispatchToProps = (
+    dispatch: ThunkDispatch<any, any, AppActions>,
+    ownProps: AddTodoProps
+): LinkDispatchProps => ({
+    startAddTodo: bindActionCreators(startAddTodo, dispatch),
+    startEditTodo: bindActionCreators(startEditTodo, dispatch)
+});
+
+const AddTodoContainer = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(AddTodoComponent);
+
+export default AddTodoContainer;
+
