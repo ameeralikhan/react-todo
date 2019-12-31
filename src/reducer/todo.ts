@@ -1,4 +1,3 @@
-import { Todo } from "../type/Todo";
 import { TodoActionTypes } from "../type/action";
 import { getTodos } from '../add-todo-component/add-todo-service';
 
@@ -10,38 +9,40 @@ const todoReducer = (
   state = initialState,
   action: TodoActionTypes
 ) => {
+  let t = null;
   switch (action.type) {
     case "ADD_TODO":
-      return Object.assign({}, {
+      t = Object.assign({}, {
         ...state,
         todos: getTodos()
       });
       break;
     case "REMOVE_TODO":
-      return Object.assign({}, {
+      t = Object.assign({}, {
         ...state,
         todos: getTodos()
       });
       break;
     case "EDIT_TODO":
-      Object.assign({}, {
+      t = Object.assign({}, {
         ...state,
         todos: getTodos()
       });
       break;
     case "SET_TODOS":
-      return Object.assign({}, {
+      t = Object.assign({}, {
         ...state,
         todos: getTodos()
       });
       break;
     default:
-      return Object.assign({}, {
+      t = Object.assign({}, {
         ...state,
         todos: getTodos()
       });
       break;
   }
+  return t;
 };
 
 export { todoReducer };
