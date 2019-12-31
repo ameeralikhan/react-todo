@@ -1,38 +1,28 @@
 import React, { Component } from 'react';
 import './todo-list-component.scss';
-import { TodoService } from "../add-todo-component/add-todo-service";
-import { TodoList } from "../add-todo-component/add-todo.interface";
-import { AddTodoComponent } from '../add-todo-component/add-todo-component';
+import { Todo } from '../type/Todo';
+import { AppState } from '../store/configureStore';
+import { connect } from 'react-redux';
+import AddTodoContainer from '../add-todo-component/add-todo-component';
 
-interface IProps {
-}
+interface AddTodoProps { }
 
-interface IState {
-    todos?: TodoList[];
-}
+interface AddTodoState { }
 
+type Props = AddTodoProps & LinkStateProps;
 
-export class TodoListComponent extends Component<IProps, IState> {
+class TodoListComponent extends Component<Props, AddTodoState> {
 
-    todoService = new TodoService();
-    todos: TodoList[] = [];
+    todos: Todo[] = [];
 
-    componentWillMount() {
-        this.getTodos();
-    }
+    componentWillMount() { }
 
     componentDidMount() { }
 
-    getTodos() {
-        this.todos = this.todoService.getTodos();
-        this.setState({
-            todos: this.todos
-        });
-    }
-
     render() {
         return <div className="todo-list-container">
-            <AddTodoComponent refreshTodos={this.getTodos.bind(this)}></AddTodoComponent>
+            <br />
+            <AddTodoContainer></AddTodoContainer>
             <br />
             <table className="todo-table">
                 <thead>
@@ -44,7 +34,7 @@ export class TodoListComponent extends Component<IProps, IState> {
                     </tr>
                 </thead>
                 <tbody>
-                    {!this.state.todos ? "" : this.state.todos.map((listValue, index) => {
+                    {!this.props.todos ? "" : this.props.todos.map((listValue: Todo, index: number) => {
                         return (
                             <tr key={index}>
                                 <td>{listValue.title}</td>
@@ -58,3 +48,20 @@ export class TodoListComponent extends Component<IProps, IState> {
         </div>
     }
 }
+
+interface LinkStateProps {
+    todos: Todo[];
+}
+
+const mapStateToProps = (
+    state: AppState,
+    ownProps: AddTodoProps
+): LinkStateProps => ({
+    todos: state.todoReducer ? state.todoReducer.todos : []
+});
+
+const TodoListContainer = connect(
+    mapStateToProps
+)(TodoListComponent);
+
+export default TodoListContainer;

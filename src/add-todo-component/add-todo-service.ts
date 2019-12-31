@@ -1,29 +1,30 @@
-import { AddTodo, TodoList } from "./add-todo.interface";
+import { Todo } from "../type/Todo";
+
+const localStorageKey: string = 'myTodos';
 
 
-export class TodoService {
+function createTodo(newTodo: Todo): Todo {
+    let todos = getTodos();
+    todos.push(newTodo);
+    setTodos(todos);
+    return newTodo;
+}
 
-    localStorageKey: string = 'myTodos';
-
-    constructor() { }
-
-    createTodo(newTodo: AddTodo): AddTodo {
-        let todos = this.getTodos();
-        todos.push(newTodo);
-        this.setTodos(todos);
-        return newTodo;
+function getTodos(): Todo[] {
+    let todos = localStorage.getItem(localStorageKey);
+    if (!todos) {
+        return [] as Todo[];
     }
+    let parsedTodo = JSON.parse(todos) as Todo[];
+    return parsedTodo;
+}
 
-    getTodos(): TodoList[] {
-        let todos = localStorage.getItem(this.localStorageKey);
-        if (!todos) {
-            return [] as TodoList[];
-        }
-        let parsedTodo = JSON.parse(todos) as TodoList[];
-        return parsedTodo;
-    }
+function setTodos(todos: Todo[]) {
+    localStorage.setItem(localStorageKey, JSON.stringify(todos));
+}
 
-    setTodos(todos: TodoList[]) {
-        localStorage.setItem(this.localStorageKey, JSON.stringify(todos));
-    }
+export {
+    createTodo,
+    getTodos,
+    setTodos
 }
