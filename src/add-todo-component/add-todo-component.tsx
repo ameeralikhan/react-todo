@@ -114,7 +114,7 @@ const mapStateToProps = (
     state: AppState,
     ownProps: AddTodoProps
 ): LinkStateProps => ({
-    todos: state.todoReducer.todos
+    todos: state.todoReducer ? state.todoReducer.todos : []
 });
 
 const mapDispatchToProps = (

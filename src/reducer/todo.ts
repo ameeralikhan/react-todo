@@ -16,39 +16,31 @@ const todoReducer = (
         ...state,
         todos: getTodos()
       });
+      break;
     case "REMOVE_TODO":
       return Object.assign({}, {
         ...state,
         todos: getTodos()
       });
+      break;
     case "EDIT_TODO":
       Object.assign({}, {
         ...state,
         todos: getTodos()
       });
-    // return state.todos.map(todo => {
-    //   if (todo.id === action.todo.id) {
-    //     return Object.assign({}, {
-    //       ...state,
-    //       todos: getTodos()
-    //     });
-    //   } else {
-    //     return Object.assign({}, {
-    //       ...state,
-    //       todos: getTodos()
-    //     });
-    //   }
-    // });
+      break;
     case "SET_TODOS":
       return Object.assign({}, {
         ...state,
         todos: getTodos()
       });
+      break;
     default:
       return Object.assign({}, {
         ...state,
         todos: getTodos()
       });
+      break;
   }
 };
 
